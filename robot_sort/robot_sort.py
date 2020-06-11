@@ -92,12 +92,56 @@ class SortingRobot:
         """
         return self._light == "ON"
 
+    def put_back(self):
+        self.move_left()
+        self.swap_item()
+        self.move_right()
+    # with empty item on hold
+
+    
+    #exchange
+    def f_exchange(self):
+        self.swap_item()
+        self.move_left()
+        self.swap_item()
+        self.move_right()
+    
+
+
+
     def sort(self):
         """
         Sort the robot's list.
         """
-        # Fill this out
-        pass
+        #will user insertion sort algorithm 
+
+        while self.can_move_right(): # increment to right direction while robot is allowed 
+            self.swap_item() # getting the 1st element in the list
+            self.move_right() # move to the next 
+            if self.compare_item() == 1:  # compare if robot is holding higher number
+                self.f_exchange()  # if robo has higher number, exchange and come back to same spot with a empty hand
+                my_current_spot = self._position
+                self.swap_item() # pick up item to compare with other items in the left
+                while self.can_move_left(): # will compare with all elements in the left to see if robo holding the lower the number
+                    self.move_left()
+                    if self.compare_item() == -1: # if robo hold lower number
+                        self.swap_item()  # exchange the item 
+                        self.move_right()  # move to right to place back
+                        self.swap_item()  # robo is holding empty hand now
+                        self.move_left() # to back to pickup the item again
+                        self.swap_item() # pickup the item to compare the left items again
+                    
+                    else:
+                        self._position = my_current_spot  # go back to where robo was starting move to left to compar
+
+
+            else:                  # if not, put back the item and come back to the same spot with a empty hand
+                self.put_back() # will go for next iteration for while loop  to pick up the next item
+                   
+        
+
+
+        return self
 
 
 if __name__ == "__main__":
